@@ -3,7 +3,7 @@ module testbench();
    reg tb_clk,tb_j,tb_k,tb_rst;
    wire tb_q, tb_nq;
    
-   ff dut(
+   jk_ff_tt dut(
 	  .j(tb_j),
 	  .k(tb_k),
 	  .rst(tb_rst),
@@ -23,10 +23,9 @@ module testbench();
    initial begin
       forever begin
 	 @(reset_trigger);
-	 @(negedge tb_clk);
+	 tb_rst = 'b1; 
 	 tb_rst = 'b0;
-	 repeat(2)
-	   @(posedge tb_clk);
+	 @(posedge tb_clk);
 	 tb_rst = 'b1;
 	 -> reset_done;
 	 
@@ -35,28 +34,33 @@ module testbench();
 
    initial begin
       tb_clk = 'b0;
-      tb_rst = 'b1;
-    
-      tb_rst = 'b0;
       tb_j = 'b0;
-      tb_k = 'b0;
-      
-      #20;
-      tb_rst = 'b1; 
-      tb_j = 'b1;
       tb_k = 'b0;
 
-      #20;
+      -> reset_trigger;
+
+      @(reset_done); 
       tb_j = 'b0;
       tb_k = 'b1;
-      
-      #20;
+
+      repeat(2)
+	@(posedge tb_clk);
+
+      #5; 
+      tb_j = 'b1;
+      tb_k = 'b0;
+     
+      repeat(2)
+       @(posedge tb_clk);
+
+      #5;    
       tb_j = 'b1;
       tb_k = 'b1;
  
-      #10 -> reset_trigger;
-      
-      @(reset_done);
+      repeat(2)
+	@(posedge tb_clk);
+
+      #5;
       tb_j = 'b0;
       tb_k = 'b0;
       
