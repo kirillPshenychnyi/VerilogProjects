@@ -3,7 +3,7 @@ module ff (rst, j, k, clk, q, nq);
    input rst,j,k,clk;
    output reg q, nq;
     
-   always@(posedge clk or posedge rst) begin : MAIN
+   always@(posedge clk) begin : MAIN
       reg q_tmp;
       
       if( rst == 'b0 )
