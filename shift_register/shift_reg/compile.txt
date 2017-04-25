@@ -1,0 +1,5 @@
+../jk_ff_tt/ff_tt.v
+../jk_ff/ff.v
+testbench.v
+shift_reg.v
+
